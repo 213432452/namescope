@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NameScope</title>
+
+<style>
+:root {
+  --bg: #100817;
+  --panel: #211329;
+  --panel2: #2d1739;
+  --input: #160b20;
+  --pink: #ff18b7;
+  --purple: #a817c9;
+  --text: #ffffff;
+  --muted: #c6a9ca;
+  --green: #5be3a1;
+  --yellow: #ffd166;
+  --red: #ff6688;
+  --border: #71377e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 90% 0%, #59175f 0, transparent 35%),
+    linear-gradient(135deg, #100817, #190b23);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  color: white;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 22px #ff18b744;
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+button.secondary {
+  background: var(--panel2);
+  box-shadow: none;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 13px;
+  color: white;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 15px #ff18b755;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Login */
+
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: min(430px, 100%);
+  padding: 35px;
+  background: #211329ee;
+  border: 1px solid #ff18b766;
+  border-radius: 22px;
+  box-shadow: 0 0 50px #ff18b722;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 25px;
+  border-radius: 19px;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #ff5aca;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 8px 0;
+  font-size: 34px;
+}
+
+h1 span {
+  color: var(--pink);
+}
+
+h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.login-card label,
+.controls label {
+  display: block;
+  margin: 18px 0 7px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.login-card button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.small {
+  display: block;
+  margin-top: 17px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+/* App */
+
+.app {
+  max-width: 1250px;
+  margin: auto;
+  padding: 28px 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.online {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: #211329ee;
+  border: 1px solid #71377e;
+  border-radius: 20px;
+  box-shadow: 0 0 40px #ff18b714;
+}
+
+.controls {
+  padding: 22px;
+}
+
+.controls button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.notice {
+  margin-top: 22px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #35183e;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.notice strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--yellow);
+}
+
+.results {
+  min-width: 0;
+  padding: 22px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #ffd4f2;
+  background: #5b205e;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.table-wrap {
+  height: 470px;
+  overflow: auto;
+  margin-top: 20px;
+  border: 1px solid #482552;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid #35203d;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  color: #ffdafa;
+  background: #4d2058;
+  font-size: 11px;
+}
+
+td {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+td:first-child {
+  color: white;
+  font-family: Consolas, monospace;
+  font-weight: bold;
+}
+
+.valid {
+  color: var(--green);
+}
+
+.log-title {
+  margin-top: 15px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.log {
+  height: 85px;
+  overflow: auto;
+  margin-top: 6px;
+  padding: 10px;
+  color: var(--green);
+  background: #120a18;
+  border-radius: 10px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Mobile */
+
+@media (max-width: 760px) {
+  .app {
+    padding: 20px 13px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .topbar h1 {
+    font-size: 27px;
+  }
+
+  .online {
+    padding-top: 8px;
+    font-size: 9px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .controls,
+  .results {
+    width: 100%;
+  }
+
+  .table-wrap {
+    height: 360px;
+  }
+
+  th,
+  td {
+    padding: 11px 8px;
+    font-size: 11px;
+  }
+
+  .results-header {
+    align-items: flex-start;
+  }
+
+  .badge {
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Login screen -->
+
+<section id="loginScreen" class="login">
+  <div class="login-card">
+    <div class="logo">NS</div>
+
+    <p class="eyebrow">NS / ACCESS</p>
+
+    <h1>Welcome back<span>.</span></h1>
+
+    <p class="muted">
+      Enter your key to connect your workspace.
+    </p>
+
+    <label for="accessKey">Access key</label>
+
+    <input
+      id="accessKey"
+      type="password"
+      placeholder="Enter access key"
+      autocomplete="off"
+    >
+
+    <button
+      id="loginButton"
+      type="button"
+      onclick="openWorkspace()">
+      Open workspace ↗
+    </button>
+
+    <span id="loginMessage" class="small">
+      Enter your key to continue
+    </span>
+
+    <span class="small">
+      ◉ Local generation workspace
+    </span>
+  </div>
+</section>
+
+<!-- Main app -->
+
+<section id="appScreen" class="app" hidden>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">NS / WORKSPACE</p>
+      <h1>NameScope<span>.</span></h1>
+    </div>
+
+    <div class="online">● LOCAL MODE</div>
+  </header>
+
+  <main class="layout">
+
+    <!-- Controls -->
+
+    <aside class="panel controls">
+      <h2>Generator</h2>
+
+      <p class="muted">
+        Create random local candidates.
+      </p>
+
+      <label for="language">Language</label>
+
+      <select id="language">
+        <option value="both">Both</option>
+        <option value="pt">Portuguese</option>
+        <option value="en">English</option>
+      </select>
+
+      <label for="length">Username length</label>
+
+      <select id="length">
+        <option value="3">3 characters</option>
+        <option value="4" selected>4 characters</option>
+        <option value="5">5 characters</option>
+        <option value="6">6 characters</option>
+      </select>
+
+      <label for="mode">Character mode</label>
+
+      <select id="mode">
+        <option value="mixed">Letters + numbers</option>
+        <option value="letters">Letters only</option>
+        <option value="numbers">Numbers only</option>
+      </select>
+
+      <label for="amount">Amount</label>
+
+      <input
+        id="amount"
+        type="number"
+        min="1"
+        max="100000"
+        value="1000"
+      >
+
+      <button
+        id="generateButton"
+        type="button"
+        onclick="generateNames()">
+        Generate names
+      </button>
+
+      <button
+        id="exportButton"
+        class="secondary"
+        type="button"
+        onclick="exportCsv()">
+        Export CSV
+      </button>
+
+      <button
+        id="clearButton"
+        class="secondary"
+        type="button"
+        onclick="clearResults()">
+        Clear results
+      </button>
+
+      <div class="notice">
+        <strong>LOCAL ONLY</strong>
+        Candidates are generated and format-checked locally.
+        Availability is not verified.
+      </div>
+    </aside>
+
+    <!-- Results -->
+
+    <section class="panel results">
+      <div class="results-header">
+        <div>
+          <h2>Candidate results</h2>
+          <p id="countLabel" class="muted">0 names</p>
+        </div>
+
+        <span class="badge">NOT VERIFIED</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Format</th>
+              <th>Length</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="log-title">Activity log</div>
+
+      <div id="logBox" class="log"></div>
+    </section>
+
+  </main>
+</section>
+
+<script>
+const PORTUGUESE = [
+  "lua",
+  "sol",
+  "mar",
+  "paz",
+  "ceu",
+  "flor",
+  "luz",
+  "voz",
+  "vida",
+  "fogo",
+  "onda",
+  "alma",
+  "brisa",
+  "sonho",
+  "noite"
+];
+
+const ENGLISH = [
+  "sky",
+  "sun",
+  "sea",
+  "fox",
+  "cat",
+  "moon",
+  "star",
+  "fire",
+  "wave",
+  "glow",
+  "void",
+  "dawn",
+  "light",
+  "dream",
+  "night"
+];
+
+const LETTERS = "abcdefghijklmnopqrstuvwxyz";
+const DIGITS = "0123456789";
+
+let results = [];
+let logs = [
+  "[system] Ready for local generation."
+];
+
+function get(id) {
+  return document.getElementById(id);
+}
+
+function openWorkspace() {
+  const key = get("accessKey").value.trim();
+  const loginScreen = get("loginScreen");
+  const appScreen = get("appScreen");
+  const message = get("loginMessage");
+
+  if (key === "demo-2026") {
+    loginScreen.hidden = true;
+    appScreen.hidden = false;
+
+    get("logBox").textContent =
+      "[system] Ready for local generation.";
+  } else {
+    message.textContent = "Invalid access key";
+    message.style.color = "#ff6688";
+  }
+}
+
+function addLog(message) {
+  logs.push(message);
+
+  const logBox = get("logBox");
+
+  if (!logBox) {
+    return;
+  }
+
+  logBox.textContent = logs.slice(-8).join("
+");
+}
+
+function validFormat(name) {
+  return (
+    /^[a-z0-9_.]+$/.test(name) &&
+    name.length >= 2 &&
+    name.length <= 32 &&
+    !name.includes("..") &&
+    !name.includes("discord")
+  );
+}
+
+function randomCandidate(length, mode) {
+  let pool = LETTERS + DIGITS;
+
+  if (mode === "letters") {
+    pool = LETTERS;
+  }
+
+  if (mode === "numbers") {
+    pool = DIGITS;
+  }
+
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    const index = Math.floor(Math.random() * pool.length);
+    result += pool[index];
+  }
+
+  return result;
+}
+
+function getWords() {
+  const language = get("language").value;
+
+  if (language === "pt") {
+    return PORTUGUESE;
+  }
+
+  if (language === "en") {
+    return ENGLISH;
+  }
+
+  return [...PORTUGUESE, ...ENGLISH];
+}
+
+function generateNames() {
+  let amount = Number(get("amount").value);
+
+  if (!Number.isFinite(amount)) {
+    amount = 1000;
+  }
+
+  amount = Math.max(1, Math.min(amount, 100000));
+
+  const length = Number(get("length").value);
+  const mode = get("mode").value;
+  const names = new Set();
+
+  addLog(
+    `[start] Generating ${amount.toLocaleString()} candidates...`
+  );
+
+  while (names.size < amount) {
+    const candidate = randomCandidate(length, mode);
+
+    if (validFormat(candidate)) {
+      names.add(candidate);
+    }
+  }
+
+  for (const word of getWords()) {
+    if (names.size >= amount) {
+      break;
+    }
+
+    const variants = [
+      word,
+      word + Math.floor(Math.random() * 100),
+      word + "x",
+      "x" + word
+    ];
+
+    for (const variant of variants) {
+      if (names.size >= amount) {
+        break;
+      }
+
+      if (validFormat(variant)) {
+        names.add(variant);
+      }
+    }
+  }
+
+  results = [...names]
+    .slice(0, amount)
+    .sort();
+
+  renderResults();
+
+  addLog(
+    `[done] Generated ${results.length.toLocaleString()} candidates.`
+  );
+
+  addLog(
+    "[info] No availability request was made."
+  );
+}
+
+function renderResults() {
+  const body = get("resultsBody");
+
+  body.innerHTML = "";
+
+  for (const username of results) {
+    const row = document.createElement("tr");
+
+    const usernameCell = document.createElement("td");
+    usernameCell.textContent = username;
+
+    const formatCell = document.createElement("td");
+    formatCell.textContent = "VALID FORMAT";
+    formatCell.className = "valid";
+
+    const lengthCell = document.createElement("td");
+    lengthCell.textContent = String(username.length);
+
+    const statusCell = document.createElement("td");
+    statusCell.textContent = "LOCAL CANDIDATE";
+
+    row.appendChild(usernameCell);
+    row.appendChild(formatCell);
+    row.appendChild(lengthCell);
+    row.appendChild(statusCell);
+
+    body.appendChild(row);
+  }
+
+  get("countLabel").textContent =
+    `${results.length.toLocaleString()} names`;
+}
+
+function exportCsv() {
+  if (!results.length) {
+    alert("Generate candidates first.");
+    return;
+  }
+
+  const rows = [
+    ["username", "format", "length", "status"],
+    ...results.map((username) => [
+      username,
+      "VALID FORMAT",
+      username.length,
+      "LOCAL CANDIDATE"
+    ])
+  ];
+
+  const csv = rows
+    .map((row) => {
+      return row
+        .map((cell) => {
+          const safe = String(cell).replaceAll('"', '""');
+          return `"${safe}"`;
+        })
+        .join(",");
+    })
+    .join("
+");
+
+  const blob = new Blob(
+    [csv],
+    { type: "text/csv;charset=utf-8" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "namescope-results.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+  addLog("[export] CSV downloaded.");
+}
+
+function clearResults() {
+  results = [];
+  renderResults();
+  addLog("[clear] Results cleared.");
+}
+
+get("accessKey").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    openWorkspace();
+  }
+});
+</script>
+
+</body>
+  </html>
